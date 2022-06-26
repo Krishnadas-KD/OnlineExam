@@ -34,7 +34,44 @@
 <script>
     $(document).ready(function() {
         $('span').click(function(event) {
-            alert(event.target.id);
+            var my_token = '{{ csrf_token }}';
+
+            $.ajax({
+                url: "{% url 'prepreview' %}",
+                type: "POST",
+
+                data: {
+                    "csrfmiddlewaretoken": my_token,
+                    qid: event.target.id,
+                },
+                success: function(response) {
+
+                    var temp;
+                    for (var i = 1; i <= response.qnums; i++) {
+                        $("#qlist").append('<span id="Q' + i + '">Q' + i + '</span>      ');
+                        temp = i;
+                    }
+                    alert(response.question);
+                    $("#q").text(response.qno);
+
+                    $("#qaution").val(response.question);
+                    $("#optiona").val(response.optiona);
+                    $("#optionb").val(response.optionb);
+                    $("#optionc").val(response.optionc);
+                    $("#optiond").val(response.optiond);
+                    $("input:radio").attr("checked", false);
+                    if (response.answer == "a") {
+                        $("#optiona").attr("checked", true);
+                    } else if (response.answer == "b") {
+                        $("#optionb").attr("checked", true);
+                    } else if (response.answer == "c") {
+                        $("#optionc").attr("checked", true);
+                    } else if (response.answer == "d") {
+                        $("#optiond").attr("checked", true);
+                    }
+
+                }
+            });
         });
 
 
@@ -58,7 +95,7 @@
                     $("#qlist").empty();
                     var temp;
                     for (var i = 1; i <= response.qnums; i++) {
-                        $("#qlist").append('<span id="' + i + '">Q' + i + '</span>      ');
+                        $("#qlist").append('<span id="Q' + i + '">Q' + i + '</span>      ');
                         temp = i;
                     }
                     temp = int(temp) + 1;

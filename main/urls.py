@@ -6,6 +6,7 @@ urlpatterns = [
     path('', index),
     path('addexam', addexam),
     path('addqs', addqexam , name='getexam'),
+    path('editeqs', editexam , name='prepreview'),
     path('defaultload', defaultload),
     path('finishcreation', finishcreation),
     path('getquestions', getquestions),

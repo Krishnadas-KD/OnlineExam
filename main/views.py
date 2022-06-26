@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
-
-
+import re
+from django.core import serializers
 from .models import *
 
 
@@ -27,14 +27,28 @@ def addqexam(request):
     d=request.POST.get('d')
     currect=request.POST.get('currect')
     qnumber=request.POST.get('qnumber')
-    print(currect)
-    qs=examquestion(UniqCode=request.session['uniq'],qno=qnumber,question=q,optiona=a,optionb=b,optionc=c,optiond=d,answer=currect)
+    qnum = examquestion.objects.filter(UniqCode=request.session['uniq']).count()+1
+    qno=qnumber
+    print(qnumber)
+    if examquestion.objects.filter(UniqCode=request.session['uniq'],qno=qno).exists():
+        examquestion.objects.filter(UniqCode=request.session['uniq'],qno=qno).update(optiona=a,optionb=b,optionc=c,optiond=d,answer=currect)
+    else:
+        qs=examquestion(UniqCode=request.session['uniq'],qno="Q"+str(qnum),question=q,optiona=a,optionb=b,optionc=c,optiond=d,answer=currect)
+        qs.save()
+    qnum = examquestion.objects.filter(UniqCode=request.session['uniq']).count()
+    return JsonResponse({'qnums':qnum})
 
-    qs.save()
-    print(qs)
+
+def editexam(request):
+    qid=request.POST.get('qid')
+    print(qid)
+    print(request.session['uniq'])
+    qs=examquestion.objects.get(UniqCode=request.session['uniq'],qno=qid)
     qnum = examquestion.objects.filter(UniqCode=request.session['uniq']).count()
     print(qnum)
-    return JsonResponse({'qnums':qnum})
+
+    return JsonResponse({'qno':qs.qno,'question':qs.question,'optiona':qs.optiona,'optionb':qs.optionb,'optionc':qs.optionc,'optiond':qs.optiond,'answer':qs.answer,'qnum':qnum})
+
 
 def defaultload(request):
     qnums=examquestion.objects.filter(UniqCode=request.session['uniq']).count()
