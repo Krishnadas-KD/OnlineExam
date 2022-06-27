@@ -36,6 +36,8 @@ def addqexam(request):
         qs=examquestion(UniqCode=request.session['uniq'],qno="Q"+str(qnum),question=q,optiona=a,optionb=b,optionc=c,optiond=d,answer=currect)
         qs.save()
     qnum = examquestion.objects.filter(UniqCode=request.session['uniq']).count()
+    
+    print(qnum)
     return JsonResponse({'qnums':qnum})
 
 
@@ -56,12 +58,15 @@ def defaultload(request):
     pass
 
 def finishcreation(request):
+    qc=examquestion.objects.filter(UniqCode=request.session['uniq']).count()
+    examdetails.objects.filter(UniqCode=request.session['uniq']).update(totalq=qc)
     return render(request,'index.html')
 
 def getquestions(request):
-    quest=examquestion.objects.filter(UniqCode=request.session['uniq']).count()
-    print(quest)
-    return JsonResponse({'quest':quest})
+    q=request.POST.get('qid')
+    qs=examquestion.objects.get(UniqCode=request.session['uniq'],qno=q)
+    print(q)
+    return JsonResponse({'qno':qs.qno,'question':qs.question,'optiona':qs.optiona,'optionb':qs.optionb,'optionc':qs.optionc,'optiond':qs.optiond,'answer':qs.answer})
 
 def examcode():
     n=10

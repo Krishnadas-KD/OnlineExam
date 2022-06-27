@@ -9,5 +9,5 @@ urlpatterns = [
     path('editeqs', editexam , name='prepreview'),
     path('defaultload', defaultload),
     path('finishcreation', finishcreation),
-    path('getquestions', getquestions),
+    path('getquestions', getquestions, name='getqution'),
 ]

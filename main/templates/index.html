@@ -12,56 +12,63 @@
     {% csrf_token %}
 
     <br/>
-    <span id="q">Q1</span>
+    <span id="q"></span>
     <span id="quests"></span>
-    <input type="radio" name="currect" value="a">A <br/>
-    <input type="radio" name="currect" value="b">B<br/>
-    <input type="radio" name="currect" value="c">C<br/>
-    <input type="radio" name="currect" value="d">D<br/>
+    <input type="radio" name="currect" value="a">A <span id="optiona"></span> <br/>
+    <input type="radio" name="currect" value="b">B<span id="optionb"></span><br/>
+    <input type="radio" name="currect" value="c">C<span id="optionc"></span><br/>
+    <input type="radio" name="currect" value="d">D<span id="optiond"></span><br/>
     <br/>
+    <p class="countdown" id="countdown">5</p>
     <a href="/finishcreation">finish</a>
 </body>
 <script>
+    var sec = 4
+    var timer = setInterval(function() {
+        $('#countdown').text(sec--);
+        if (sec == 0) {
+            sec = 5;
+        }
+    }, 1000);
+
+    function fetchdata() {
+        var my_token = '{{ csrf_token }}';
+        $.ajax({
+            url: "{% url 'getqution' %}",
+            type: "POST",
+            data: {
+                "csrfmiddlewaretoken": my_token,
+                qid: "Q2",
+            },
+            success: function(response) {
+                $("#quests").text(response.qno);
+                $("#optiona").text(response.optiona);
+                $("#optionb").text(response.optionb);
+                $("#optionc").text(response.optionc);
+                $("#optiond").text(response.optiond);
+            }
+        });
+    }
     $(document).ready(function() {
-        $('span').click(function(event) {
-            alert(event.target.id);
+        setInterval(fetchdata, 5000);
+
+        var my_token = '{{ csrf_token }}';
+        $.ajax({
+            url: "{% url 'getqution' %}",
+            type: "POST",
+            data: {
+                "csrfmiddlewaretoken": my_token,
+                qid: "Q1",
+            },
+            success: function(response) {
+                $("#quests").text(response.qno);
+                $("#optiona").text(response.optiona);
+                $("#optionb").text(response.optionb);
+                $("#optionc").text(response.optionc);
+                $("#optiond").text(response.optiond);
+            }
         });
 
-
-        $("#addresult").click(function() {
-            var my_token = '{{ csrf_token }}';
-            $.ajax({
-                url: "{% url 'getexam' %}",
-                type: "POST",
-
-                data: {
-                    "csrfmiddlewaretoken": my_token,
-                    q: $("#qaution").val(),
-                    a: $("#optiona").val(),
-                    b: $("#optionb").val(),
-                    c: $("#optionc").val(),
-                    d: $("#optiond").val(),
-                    qnumber: $("#q").text(),
-                    currect: $("input[name='currect']:checked").val()
-                },
-                success: function(response) {
-                    $("#qlist").empty();
-                    var temp;
-                    for (var i = 1; i <= response.qnums; i++) {
-                        $("#qlist").append('<span id="' + i + '">Q' + i + '</span>      ');
-                        temp = i;
-                    }
-                    temp = int(temp) + 1;
-                    $("#q").text("Q" + temp);
-                    $("#qaution").val("");
-                    $("#optiona").val("");
-                    $("#optionb").val("");
-                    $("#optionc").val("");
-                    $("#optiond").val("");
-                    $("input:radio").attr("checked", false);
-                }
-            });
-        });
 
 
     });

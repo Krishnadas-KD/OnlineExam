@@ -51,7 +51,7 @@
                         $("#qlist").append('<span id="Q' + i + '">Q' + i + '</span>      ');
                         temp = i;
                     }
-                    alert(response.question);
+
                     $("#q").text(response.qno);
 
                     $("#qaution").val(response.question);
@@ -59,15 +59,15 @@
                     $("#optionb").val(response.optionb);
                     $("#optionc").val(response.optionc);
                     $("#optiond").val(response.optiond);
-                    $("input:radio").attr("checked", false);
-                    if (response.answer == "a") {
-                        $("#optiona").attr("checked", true);
-                    } else if (response.answer == "b") {
-                        $("#optionb").attr("checked", true);
-                    } else if (response.answer == "c") {
-                        $("#optionc").attr("checked", true);
-                    } else if (response.answer == "d") {
-                        $("#optiond").attr("checked", true);
+
+                    if (response.answer == 'a') {
+                        $("input:radio[value='a']").prop('checked', true);
+                    } else if (response.answer == 'b') {
+                        $("input:radio[value='b']").prop('checked', true);
+                    } else if (response.answer == 'c') {
+                        $("input:radio[value='c']").prop('checked', true);
+                    } else if (response.answer == 'd') {
+                        $("input:radio[value='d']").prop('checked', true);
                     }
 
                 }
@@ -94,18 +94,21 @@
                 success: function(response) {
                     $("#qlist").empty();
                     var temp;
+                    var qno = response.qnums + 1;
                     for (var i = 1; i <= response.qnums; i++) {
                         $("#qlist").append('<span id="Q' + i + '">Q' + i + '</span>      ');
                         temp = i;
                     }
-                    temp = int(temp) + 1;
-                    $("#q").text("Q" + temp);
+
+                    $("#q").text("Q" + qno);
                     $("#qaution").val("");
                     $("#optiona").val("");
                     $("#optionb").val("");
                     $("#optionc").val("");
                     $("#optiond").val("");
-                    $("input:radio").attr("checked", false);
+                    $('input:radio[name=currect]').each(function() {
+                        $(this).prop('checked', false);
+                    });
                 }
             });
         });
