@@ -1,53 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-    {% csrf_token %}
+<html>
+
+{% csrf_token %}
+
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../static/style2.css" />
-    <title>Quiz App</title>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
-<script>
-</script>
+{% csrf_token %}
 
 <body>
-    <div class="qbar" ><strong><span id="qlist"></span></strong><strong> <span class="qadd" id="addcurrentblank">+</span></strong></div>
-    <br>
-    <br>
-    <div class="quiz-container" id="quiz">
-
-        <div class="quiz-header">
-<strong><span class="qnumber2" id="q">Q1:</span></strong>
-<br>
-            <textarea id="qaution" placeholder="Qustion" cols="45" style=" font-size:17px;border-top:transparent;border-right:transparent;border-left:transparent; background-color: #d8d6d6;"></textarea>
-            <br>
-
-            <ul>
-                <li>
-                   
-                    <label for="a" >A:<input type="text" id="optiona"></label>
-                </li>
-
-                <li>
-                    <label for="a" >B:<input type="text" id="optionb"> </label>
-                </li>
-
-                <li>
-                    <label for="a" >C:<input type="text" id="optionc"></label>
-                </li>
-
-                <li>
-                    <label for="a" >D:<input type="text" id="optiond"></label>
-                </li>
-            </ul>
-            Currect:
-            <div>A:<input type="radio" name="currect" id="a" class="answer">B:<input type="radio" name="currect" id="b" class="answer">C:<input type="radio" name="currect" id="c" class="answer"> D:<input type="radio" name="currect" id="d" class="answer"></div>
-        </div>
-        <a href="/finishcreation"><button class="button button2" >Finsih</button></a>
-    </div>
+    {% csrf_token %}
+    <span id="qlist">  </span>
+    <br/>
+    <div id="addcurrentblank"> add </div>
+    <span id="q">Q1</span>
+    <input type="text" id="qaution">
+    <br/> A:
+    <input type="text" id="optiona">
+    <br/> B:
+    <input type="text" id="optionb">
+    <br/> C:
+    <input type="text" id="optionc">
+    <br/> D:
+    <input type="text" id="optiond">
+    <br/> currect:
+    <input type="radio" name="currect" value="a">A
+    <input type="radio" name="currect" value="b">B
+    <input type="radio" name="currect" value="c">C
+    <input type="radio" name="currect" value="d">D
+    <br/>
+    <a href="/finishcreation">finish</a>
 </body>
-
 <script>
     $(document).ready(function() {
         $('span').click(function(event) {
@@ -65,7 +48,7 @@
 
                     var temp;
                     for (var i = 1; i <= response.qnums; i++) {
-                        $("#qlist").append('<span class="qnumber" id="Q'+ i + '">Q' + i + '</span>      ');
+                        $("#qlist").append('<span id="Q' + i + '">Q' + i + '</span>      ');
                         temp = i;
                     }
 
@@ -113,7 +96,7 @@
                     var temp;
                     var qno = response.qnums + 1;
                     for (var i = 1; i <= response.qnums; i++) {
-                        $("#qlist").append('<span class="qnumber" id="Q' + i + '">Q' + i + '</span>      ');
+                        $("#qlist").append('<span id="Q' + i + '">Q' + i + '</span>      ');
                         temp = i;
                     }
 

@@ -1,36 +1,32 @@
-<html>
-
-{% csrf_token %}
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../static/style2.css" />
+    <title>Quiz App</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
-{% csrf_token %}
-
-<body>
-    {% csrf_token %}
-
-    <br/>
-    <span id="q"></span>
-    <span id="quests"></span>
-    <input type="radio" name="currect" value="a">A <span id="optiona"></span> <br/>
-    <input type="radio" name="currect" value="b">B<span id="optionb"></span><br/>
-    <input type="radio" name="currect" value="c">C<span id="optionc"></span><br/>
-    <input type="radio" name="currect" value="d">D<span id="optiond"></span><br/>
-    <br/>
-    <p class="countdown" id="countdown">5</p>
-    <a href="/finishcreation">finish</a>
-</body>
 <script>
-    var sec = 4
+    var sec = 10;
     var timer = setInterval(function() {
         $('#countdown').text(sec--);
         if (sec == 0) {
-            sec = 5;
+            sec = 10;
+
+        }
+        if (sec < 6) {
+            $("#countdown").fadeToggle(1000);
+            $('#countdown').css('color', 'red');
+            $('#countdown').css('border-color', 'red');
+        }
+        if (sec >= 6) {
+            $("#countdown").fadeIn();
+            $('#countdown').css('color', 'black');
+            $('#countdown').css('border-color', 'black');
         }
     }, 1000);
-
     function fetchdata() {
         var my_token = '{{ csrf_token }}';
         $.ajax({
@@ -38,10 +34,11 @@
             type: "POST",
             data: {
                 "csrfmiddlewaretoken": my_token,
-                qid: "Q2",
+                qid: $("#q").val(),
             },
             success: function(response) {
-                $("#quests").text(response.qno);
+                $("#q").text(response.qno);
+                $("#quests").text(response.question);
                 $("#optiona").text(response.optiona);
                 $("#optionb").text(response.optionb);
                 $("#optionc").text(response.optionc);
@@ -50,7 +47,7 @@
         });
     }
     $(document).ready(function() {
-        setInterval(fetchdata, 5000);
+        setInterval(fetchdata, 10);
 
         var my_token = '{{ csrf_token }}';
         $.ajax({
@@ -61,7 +58,8 @@
                 qid: "Q1",
             },
             success: function(response) {
-                $("#quests").text(response.qno);
+                $("#q").text(response.qno);
+                $("#quests").text(response.question);
                 $("#optiona").text(response.optiona);
                 $("#optionb").text(response.optionb);
                 $("#optionc").text(response.optionc);
@@ -73,5 +71,39 @@
 
     });
 </script>
+
+<body>
+
+    <div class="quiz-container" id="quiz">
+        <div align="left" id="countdown" class="numberCircle ">1</div>
+        <div class="quiz-header">
+            <strong><span class="qnumber2" id="q"></span></strong>
+            <h2 id="quests">Question text</h2>
+            <ul>
+                <li>
+                    <input type="radio" name="answer" id="a" value="a" class="answer">
+                    <label for="a" id="optiona">Question</label>
+                </li>
+
+                <li>
+                    <input type="radio" name="answer" value="a" id="b" class="answer">
+                    <label for="b" id="optionb">Question</label>
+                </li>
+
+                <li>
+                    <input type="radio" name="answer" id="c" value="c" class="answer">
+                    <label for="c" id="optionc">Question</label>
+                </li>
+
+                <li>
+                    <input type="radio" name="answer" id="d"  value="d" class="answer">
+                    <label for="d" id="optiond">Question</label>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+    <script src="script.js"></script>
+</body>
 
 </html>

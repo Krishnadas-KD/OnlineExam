@@ -1,0 +1,78 @@
+<html>
+
+{% csrf_token %}
+
+<head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+{% csrf_token %}
+
+<body>
+    {% csrf_token %}
+
+    <br/>
+    <span id="q"></span>
+    <span id="quests"></span>
+    <input type="radio" name="currect" value="a">A <span id="optiona"></span> <br/>
+    <input type="radio" name="currect" value="b">B<span id="optionb"></span><br/>
+    <input type="radio" name="currect" value="c">C<span id="optionc"></span><br/>
+    <input type="radio" name="currect" value="d">D<span id="optiond"></span><br/>
+    <br/>
+    <p class="countdown" id="countdown">5</p>
+    <a href="/finishcreation">finish</a>
+</body>
+<script>
+    var sec = 4
+    var timer = setInterval(function() {
+        $('#countdown').text(sec--);
+        if (sec == 0) {
+            sec = 5;
+        }
+    }, 1000);
+
+    function fetchdata() {
+        var my_token = '{{ csrf_token }}';
+        $.ajax({
+            url: "{% url 'getqution' %}",
+            type: "POST",
+            data: {
+                "csrfmiddlewaretoken": my_token,
+                qid: "Q2",
+            },
+            success: function(response) {
+                $("#q").text(response.qno);
+                $("#quests").text(response.question);
+                $("#optiona").text(response.optiona);
+                $("#optionb").text(response.optionb);
+                $("#optionc").text(response.optionc);
+                $("#optiond").text(response.optiond);
+            }
+        });
+    }
+    $(document).ready(function() {
+        setInterval(fetchdata, 5000);
+
+        var my_token = '{{ csrf_token }}';
+        $.ajax({
+            url: "{% url 'getqution' %}",
+            type: "POST",
+            data: {
+                "csrfmiddlewaretoken": my_token,
+                qid: "Q1",
+            },
+            success: function(response) {
+                $("#quests").text(response.qno);
+                $("#optiona").text(response.optiona);
+                $("#optionb").text(response.optionb);
+                $("#optionc").text(response.optionc);
+                $("#optiond").text(response.optiond);
+            }
+        });
+
+
+
+    });
+</script>
+
+</html>
