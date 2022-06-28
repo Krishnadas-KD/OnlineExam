@@ -29,6 +29,7 @@
     }, 1000);
     function fetchdata() {
         var my_token = '{{ csrf_token }}';
+        alert($("#q").text())
         $.ajax({
             url: "{% url 'getqution' %}",
             type: "POST",
@@ -47,7 +48,7 @@
         });
     }
     $(document).ready(function() {
-        setInterval(fetchdata, 10);
+        setInterval(fetchdata, 10000);
 
         var my_token = '{{ csrf_token }}';
         $.ajax({
