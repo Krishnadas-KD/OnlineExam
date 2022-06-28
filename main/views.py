@@ -64,7 +64,12 @@ def finishcreation(request):
 
 def getquestions(request):
     q=request.POST.get('qid')
-    q=
+    num=0
+    for c in q:
+        if c.isdigit():
+            num = num + c
+    num=num+1        
+    q="Q"+num
     qs=examquestion.objects.get(UniqCode=request.session['uniq'],qno=q)
     print(q)
     return JsonResponse({'qno':qs.qno,'question':qs.question,'optiona':qs.optiona,'optionb':qs.optionb,'optionc':qs.optionc,'optiond':qs.optiond,'answer':qs.answer})
